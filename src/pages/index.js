@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import hero from "../../public/assets/hero.png";
 
 export default function HomePage() {
