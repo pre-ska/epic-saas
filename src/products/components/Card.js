@@ -6,6 +6,7 @@ export default function ProductCard({ product }) {
       <Link href={`/products/${product.slug}`}>
         <img src={`/assets/${product.slug}.png`} alt={product.name} />
       </Link>
+
       <header>
         <p>{product.name}</p>
       </header>
