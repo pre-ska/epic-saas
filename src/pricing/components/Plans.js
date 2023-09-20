@@ -4,6 +4,7 @@ import { SITE_URL } from "src/core/utils";
 
 export default function Plans({ plans }) {
   const [selected, setSelected] = useState("month");
+  const [isRedirecting, setRedirecting] = useState(false);
 
   const plan = plans.find((plan) => plan.interval === selected);
 
@@ -12,6 +13,8 @@ export default function Plans({ plans }) {
   }
   console.log(plans);
   async function onCheckout() {
+    setRedirecting(true);
+
     //! ovo ide na api endpoint koji će kreirati checkout session na stripe-u
     const response = await fetch(`${SITE_URL}/api/checkout/${plan.id}`);
 
@@ -23,6 +26,8 @@ export default function Plans({ plans }) {
 
     //! redirektam usera na stripe session koji je pripremljen za njega , sa cijenom itd...
     await stripe.redirectToCheckout({ sessionId: data.id });
+
+    setRedirecting(false);
   }
 
   return (
@@ -48,8 +53,10 @@ export default function Plans({ plans }) {
                 </div>
 
                 <div>
-                  <button onClick={onCheckout} className="large-button">
-                    <div className="large-button-text">Buy Now</div>
+                  <button disabled={isRedirecting} onClick={onCheckout} className="large-button">
+                    <div className="large-button-text">
+                      {isRedirecting ? "Redirecting..." : "Buy Now"}
+                    </div>
                   </button>
                 </div>
               </div>
