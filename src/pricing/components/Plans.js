@@ -11,7 +11,7 @@ export default function Plans({ plans }) {
   function togglePlan() {
     selected === "month" ? setSelected("year") : setSelected("month");
   }
-  console.log(plans);
+
   async function onCheckout() {
     setRedirecting(true);
 

@@ -12,8 +12,6 @@ export default async function handler(req, res) {
       cancel_url: `${SITE_URL}/pricing`,
     });
 
-    console.log("session id", session.id);
-
     res.send({ id: session.id });
   } catch (error) {
     console.log("error try catch", error);
