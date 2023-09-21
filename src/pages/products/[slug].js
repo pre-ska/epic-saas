@@ -1,13 +1,53 @@
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 import PromoCard from "src/products/components/PromoCard";
 import { supabase } from "supabase";
+import SubscriberCard from "src/products/components/SubscriberCard";
 
 export default function ProductPage({ product }) {
+  const [productContent, setProductContent] = useState();
+  const session = useSession();
+  const supabaseClient = useSupabaseClient();
+
+  useEffect(() => {
+    async function getProductContent() {
+      const { data: productContent } = await supabaseClient
+        .from("product_content")
+        .select("*")
+        .eq("id", product.product_content_id)
+        .single();
+
+      setProductContent(productContent);
+    }
+
+    getProductContent();
+  }, [product.product_content_id, supabaseClient]);
+
   return (
     <section className="product-section">
       <article className="product">
         <div className="product-wrap">
-          <Image width={1000} height={300} src={`/assets/${product.slug}.png`} alt={product.name} />
+          {productContent?.download_url && (
+            <a
+              download
+              className="download-link large-button"
+              href={`/assets/${productContent.download_url}`}
+            >
+              <span className="large-button-text">Download</span>
+            </a>
+          )}
+          {productContent?.video_url ? (
+            <ReactPlayer url={productContent?.video_url} controls />
+          ) : (
+            <Image
+              width={1000}
+              height={300}
+              src={`/assets/${product.slug}.png`}
+              alt={product.name}
+            />
+          )}
         </div>
 
         <section>
@@ -21,9 +61,7 @@ export default function ProductPage({ product }) {
           </section>
         </section>
 
-        <section>
-          <PromoCard />
-        </section>
+        <section>{session ? <SubscriberCard /> : <PromoCard />}</section>
       </article>
     </section>
   );
