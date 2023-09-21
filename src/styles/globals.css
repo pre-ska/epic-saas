@@ -201,6 +201,12 @@ h4 {
   position: relative;
   padding: 0;
 }
+.large-button:disabled {
+  cursor: not-allowed;
+}
+.large-button:disabled .large-button-text {
+  background-color: #7d7d7d;
+}
 .large-button-text {
   position: relative;
   z-index: 1;
@@ -860,13 +866,7 @@ article.product-card footer > * {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(
-      max(
-        min(var(--min-grid-absolute-size), 100%),
-        var(--max-grid-relative-size) - 1rem
-      ),
-      1fr
-    )
+    minmax(max(min(var(--min-grid-absolute-size), 100%), var(--max-grid-relative-size) - 1rem), 1fr)
   );
   grid-gap: 1rem;
   gap: 1rem;
